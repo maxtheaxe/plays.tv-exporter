@@ -29,7 +29,7 @@ mass-save all your uploaded videos before plays.tv closes
 
 * Refer to the [YouTube Video](https://youtu.be/dYEfzM-CmrM)
 
-#### 4. If you are absolutely lost, send me a message
+#### 4. If you're still struggling, send me a message
 
 * [My Twitter](https://twitter.com/MaxPerrello)
 
