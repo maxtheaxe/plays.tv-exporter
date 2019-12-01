@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys # REMOVE
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 import sys
 import re
@@ -61,7 +61,7 @@ def end_checker(driver):
 
 # collector() - collect all download links and video names
 # reference: https://towardsdatascience.com/web-scraping-using-selenium-and-beautifulsoup-99195cd70a58
-def collector(driver, errors = False):
+def collector(driver, errors = True):
 	source = bs(driver.page_source, 'html.parser') # make uploads page into bs obj
 	# collect uploads
 	upload_cards = source.find_all("li", class_="media-card")
@@ -88,7 +88,7 @@ def collector(driver, errors = False):
 			continue # skip this one, move on to next loop
 		video_link = 'https://vdl.plays.tv/video/' + video_id + '/processed/'
 		video_link += video_quality + '.mp4' # was too long for 1 line, I'm lazy
-		current_video[0] = video_link
+		current_video[0] = video_link # add video link to sublist
 		# get video name
 		meta_section = upload_cards[i].find("section", class_="meta")
 		meta_sub = meta_section.find("main")
@@ -100,7 +100,11 @@ def collector(driver, errors = False):
 		except AttributeError: # title not found in the original string
 			print("\t\tError: No title found for video id " + video_id + ". Skipping.")
 			continue # skip this one, move on to next loop
-		current_video[1] = video_title
+		# look for videos with duplicate names
+		for i in range (0, len(videos)): # in video list so far
+			if (video_title == videos[i][1]): # if vid with same name already exists
+				video_title = video_title + " id-" + video_id # add video id to name
+		current_video[1] = video_title # add video title to sublist
 		videos.append(current_video)
 	print("\tSuccessfully collected all video information.\n")
 	return videos
